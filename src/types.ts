@@ -221,6 +221,7 @@ export type CromAnimationsInputJsonSpec = t.TypeOf<
 // 	cromImages?: CromImagesInputJsonSpec;
 // 	cromAnimations?: CromAnimationsInputJsonSpec;
 // };
+export const eyecatcherJsonKey: string = "eyecatcher"
 export const JsonInput = t.intersection([
 	t.type({
 		romPathRoot: t.string,
@@ -229,7 +230,7 @@ export const JsonInput = t.intersection([
 		padCROMFilesTo: t.union([t.number, t.null, t.undefined]),
 		hookScript: t.union([t.string, t.null, t.undefined]),
 		codeEmit: t.union([CodeEmitJsonSpec, t.null, t.undefined]),
-		eyecatcher: t.union([EyeCatcherJsonSpec, t.null, t.undefined]),
+		[eyecatcherJsonKey]: t.union([EyeCatcherJsonSpec, t.null, t.undefined]),
 		sromImages: t.union([SromImagesJsonSpec, t.null, t.undefined]),
 		tilesets: t.union([TilesetsJsonSpec, t.null, t.undefined]),
 		cromImages: t.union([CromImagesInputJsonSpec, t.null, t.undefined]),

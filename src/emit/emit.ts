@@ -163,6 +163,14 @@ Handlebars.registerHelper('bin', (a: unknown) => {
 	return an.toString(2);
 });
 
+Handlebars.registerHelper('max', (array: unknown) => {
+  if (!Array.isArray(array)) {
+    return undefined;
+  }
+
+  return Math.max(...array.filter((val): val is number => typeof val === 'number'));
+});   
+
 async function emit(
 	rootDir: string,
 	codeEmit: CodeEmitJsonSpec,

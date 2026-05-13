@@ -3,7 +3,7 @@ import path from 'path';
 import { Palette16Bit } from '../../api/palette/types';
 import { CROMTile, ICROMGenerator } from '../../api/crom/types';
 import { determinePalettesToEmit } from '../common/determinePalettesToEmit';
-import { FileToWrite, JsonInput, CodeEmitData } from '../../types';
+import { FileToWrite, JsonInput, CodeEmitData, eyecatcherJsonKey } from '../../types';
 import { indexCroms } from './indexCroms';
 import { markCromDupes } from './markCromDupes';
 import { positionCroms } from './positionCroms';
@@ -40,11 +40,13 @@ function orchestrate(
 			return generators[generatorKey];
 		});
 
-	// ensure the tile at 0xff is blank, as it is used by the eyecatcher.
-	// we push this on every time, as even if no eyecatcher images are specified,
-	// ensuring a single blank tile is not a big deal and will make it more obvious
-	// what the eyecatcher is doing
-	cromGenerators.push(cromFFBlankGenerator);
+	// The tile at 0xff must be blank for the eyecatcher sequence to work correctly.
+	// Only enforce this when eyecatcher assets are actually defined; otherwise assume
+	// the eyecatcher C ROMs are supplied as a separate ROM file and user tiles should
+	// pack from index 0 with no reserved gaps.
+	if (availableCROMGenerators.includes(eyecatcherJsonKey)) {
+		cromGenerators.push(cromFFBlankGenerator);
+	}
 
 	const cromSourcesResult = cromGenerators.map((generator) => {
 		const tiles = generator.getCROMSources(
